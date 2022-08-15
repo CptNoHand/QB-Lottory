@@ -36,9 +36,14 @@ function RegisterTicket(source, item)
 end
 
 function UpdatePayout(value)
+    local additional = 0
+    if value ~= nil then
+        additional = value
+    end
+    
     MySQL.Async.fetchAll("SELECT * FROM lotteryserver ORDER BY id DESC LIMIT 1", {}, function(result)
     local oldpayout = result[1].Payout
-    local newPayout = oldpayout+value
+    local newPayout = oldpayout+additional
     if Config.Debug then print ("payout:", newPayout) end
 
     MySQL.Async.execute("UPDATE lotteryserver SET Payout = ? WHERE id = 1", {
