@@ -1,4 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+Lottopayout = 0
 
 AddEventHandler('onResourceStart', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
@@ -44,12 +45,13 @@ function UpdatePayout(value)
     MySQL.Async.fetchAll("SELECT * FROM lotteryserver ORDER BY id DESC LIMIT 1", {}, function(result)
     local oldpayout = result[1].Payout
     local newPayout = oldpayout+additional
-    if Config.Debug then print ("payout:", newPayout) end
+    Lottopayout = newPayout*Config.Multiplier
+    if Config.Debug then print ("payout:", Lottopayout) end
 
     MySQL.Async.execute("UPDATE lotteryserver SET Payout = ? WHERE id = 1", {
         newPayout
     })
-    PostToDiscord(newPayout)
+    PostToDiscord()
 
     end)
 end
@@ -62,13 +64,15 @@ function ClearPayout()
     ClearTickets()
 end
 
-function PostToDiscord(PayoutValue)
+function PostToDiscord()
     MySQL.Async.fetchAll("SELECT * FROM lotterytickets ORDER BY id DESC LIMIT 1", {}, function(result)
+        if result ~= nil then
         local submissions = result[1].id
-        local MaxPayout = PayoutValue*Config.Multiplier
-        local text = (Lang:t("lottory.value", {payout = MaxPayout ,submission = submissions}))
+      --[[  local MaxPayout = newPayout*Config.Multiplier
+        Lottopayout = MaxPayout ]]
+        local text = (Lang:t("lottory.value", {payout = Lottopayout ,submissions = submissions}))
         PerformHttpRequest(Config.Webhook, function(err, text, header) end, 'POST', json.encode({content = text}), {["Content-Type"] = 'application/json'})
-
+        end
     end)
 end
 
@@ -91,23 +95,35 @@ function ChooseWinner()
 
                 if characterID ~= nil then
                     MySQL.Async.fetchAll('SELECT * FROM players WHERE citizenid = ? ', {characterID}, function (result)
-                        local pData = QBCore.Functions.GetPlayerByCitizenId(result[1].citizenid)
+                        local pData = QBCore.Functions.GetPlayerByCitizenId(characterID)
                         if pData ~= nil then
                         local FirstName = pData.PlayerData.charinfo.firstname
                         local LastName  = pData.PlayerData.charinfo.lastname
                         local Player = QBCore.Functions.GetPlayer(pData.PlayerData.id)
-                            if Player == nil then
+                            if not Player.Offline then
                                 MySQL.Async.fetchSingle("SELECT Payout FROM lotteryserver WHERE 1", {}, function(result)
-                                local text = (Lang:t("lottory.winner", {payout = lottopayout, firstname = FirstName, lastname = LastName}))
-                                if Config.Debug then print(text) end
-                                -- Player.Functions.AddMoney('bank', lottopayout)
-                               -- ClearPayout()
-                               -- PerformHttpRequest(Config.WinHook, function(err, text, header) end, 'POST', json.encode({content = text}), {["Content-Type"] = 'application/json'})
-                                end)
+                                local text = (Lang:t("lottory.winner", {payout = Lottopayout, firstname = FirstName, lastname = LastName}))
+                                    if Config.Debug then print(text) end
+                                    Player.Functions.AddMoney('bank', Lottopayout)
+                                --    ClearPayout()
+                                    PerformHttpRequest(Config.WinHook, function(err, text, header) end, 'POST', json.encode({content = text}), {["Content-Type"] = 'application/json'})
+                                    end)
+                                
+                                else
+                                    --    if Config.Debug then print ('Player is NOT in the CITY') end
+                                        local text = (Lang:t("lottory.winner", {payout = Lottopayout, firstname = FirstName, lastname = LastName}))
+                                        if Config.Debug then print(text) end
+                                    local bank = Player.Functions.GetMoney('bank')
+                                    local newamount = bank+Lottopayout
+                                    Player.functions.SetMoney('bank', newamount)
+                                --    ClearPayout()
+                                    PerformHttpRequest(Config.WinHook, function(err, text, header) end, 'POST', json.encode({content = text}), {["Content-Type"] = 'application/json'})
+                                
                             end
-                        if Config.Debug then print ('Player is NOT in the CITY') end
-                        Wait(10000)
-                        ChooseWinner()
+                        
+                       --- 
+                       --- Wait(10000)
+                       --- ChooseWinner()
                         end
                     end)
                 end
