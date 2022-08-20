@@ -12,3 +12,5 @@ CREATE TABLE IF NOT EXISTS `LotteryServer` (
   PRIMARY KEY (`id`),
   KEY `HasDrawn` (`HasDrawn`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `lotteryserver`(`HasDrawn`, `Payout`) VALUES ('false','100000')
