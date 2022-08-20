@@ -8,6 +8,7 @@ Config = {
     DrawTime = 19,--The hour it will be drawn at, 24HR Clock
     AlwaysNotify = true, -- Should the server post new pot every ticket submission? if false, itll only post on server restart
     Command = 'lotterydraw', -- The command to force a lottery draw
-}
+    Retries = 5, -- How many times will server retry to find online player before carrying over draw to next draw date 
+}   
 
 ---------------------------------- READ THE README FILE FOR SETUP INSTRUCTIONS -----------------------------------------

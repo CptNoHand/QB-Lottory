@@ -11,6 +11,17 @@ everyone to see ;) #BraggingRights :P
 5. copy the ticket image to qb-inventory/html/images
 6. Restart your server and enjoy!
 
+IGNORE THIS ERROR!
+[script:QB-Lottory-by] SCRIPT ERROR: @QB-Lottory-byDeadEndRP/server.lua:104: attempt to index a nil value (field 'integer index')
+[script:QB-Lottory-by] > ref (@QB-Lottory-byDeadEndRP/server.lua:104)
+[script:QB-Lottory-by] > <unknown> (@oxmysql/dist/build.js:21729)
+[script:QB-Lottory-by] > processTicksAndRejections (node:internal/process/task_queues:96)
+[script:QB-Lottory-by] > async rawQuery (@oxmysql/dist/build.js:21719)
+
+
+Its only because there is no submissions in the ticket database, it WILL go away when players start using the tickets!
+
+
 You can use /lottodraw for a forced draw. WARNING THOUGH! it will erase your ticket submissions as it counts as an official draw! This is for testing purposes to make sure its drawing and adding money to players correctly!
 
 TODO:
