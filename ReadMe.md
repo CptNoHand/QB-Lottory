@@ -26,22 +26,22 @@ You can use /lottodraw for a forced draw. WARNING THOUGH! it will erase your tic
 
 TODO:
 -   Determine weather the player is online or offline, if offline than modify player data and add money to their account
--   fix the loop to check the day of the draw and check if draw has been made and save/reset timer to database
 
 Default Config setup Just in Case
 --------------------------------------------------------------------------------------------------
 
-Config = {}
-
-Config.Multiplier = 5 --The Ammount the total lottery pay out will be, based off total value tickets are sold
-Config.TicketValue = 5000 --- The value the database goes up everytime a ticket is submitted. Best practice to use what the sales price you sell the tickets in stores for
-Config.Webhook = "" --Webhook for announcing Lotto Pot Value everytime its updated
-Config.WinHook = "" -- Webhook for where the winner will be posted
-Config.DrawDay = 6 -- weekday the draw will be done, 1=sunday, 2 monday, 3 tuesday, 4 wednesday, 5 thursday, 6 friday, 7 saturday
-Config.DrawTime = 19 --The hour it will be drawn at, 24HR Clock
-Config.AlwaysNotify = false -- Should the server post new pot every ticket submission? if false, itll only post on server restart
-
---[[
+Config = {
+    Debug = true, -- Turn debug on / off
+    Multiplier = 5, --The Ammount the total lottery pay out will be, based off total value tickets are sold
+    TicketValue = 5000, --- The value the database goes up everytime a ticket is submitted. Best practice to use what the sales price you sell the tickets in stores for
+    Webhook = "", --Webhook for announcing Lotto Pot Value everytime its updated
+    WinHook = "", -- Webhook for where the winner will be posted
+    DrawDay = 6, -- weekday the draw will be done, 1=sunday, 2 monday, 3 tuesday, 4 wednesday, 5 thursday, 6 friday, 7 saturday
+    DrawTime = 19,--The hour it will be drawn at, 24HR Clock
+    AlwaysNotify = true, -- Should the server post new pot every ticket submission? if false, itll only post on server restart
+    Command = 'lotterydraw', -- The command to force a lottery draw
+    Retries = 5, -- How many times will server retry to find online player before carrying over draw to next draw date 
+}   
 
 Add the lotto.png to 
 QB-Inventory/html/images
@@ -62,5 +62,3 @@ ADD THIS TO QB-Shops config, to the item stores you want to sell them in
 Insert this item into QB-Core/Shared/items.lua
 
 ['lotto']  = {['name'] = 'lotto',	['label'] = 'Lottery Ticket',   ['weight'] = 0,     ['type'] = 'item',  ['image'] = 'lotto.png',    ['unique'] = false, 	['useable'] = true, 	['shouldClose'] = true,	   ['combinable'] = nil,   ['description'] = 'Chance to Win Lottery!'},
-
-]]
