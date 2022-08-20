@@ -4,13 +4,12 @@ How to install
 
 1. Import the SQL file into your database, Itll create two tables, one for ticket submissions and one for the server to store its 
 lotto pot in. 
-2. In the serverLottory table, add one entry, you can set the pot to start at what ever youd like. 
-3. Create a webhook on your discord for where you want the winning announcement to be made, I put mine right in my general chat for 
+2. Create a webhook on your discord for where you want the winning announcement to be made, I put mine right in my general chat for 
 everyone to see ;) #BraggingRights :P
-4. Create a webhook for where you want to log entries and get the updated POT value. Its totally upto you if you want players to see it or not. when it gets up there tho, more people tend to but the tickets!
-5. Add the item to qb-core/shared/items.lua
-6. copy the ticket image to qb-inventory/html/images
-7. Restart your server and enjoy!
+3. Create a webhook for where you want to log entries and get the updated POT value. Its totally upto you if you want players to see it or not. when it gets up there tho, more people tend to but the tickets!
+4. Add the item to qb-core/shared/items.lua
+5. copy the ticket image to qb-inventory/html/images
+6. Restart your server and enjoy!
 
 You can use /lottodraw for a forced draw. WARNING THOUGH! it will erase your ticket submissions as it counts as an official draw! This is for testing purposes to make sure its drawing and adding money to players correctly!
 
